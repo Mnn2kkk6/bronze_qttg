@@ -1,0 +1,72 @@
+[2026-09-18T07:35:25.992+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: qttg_bronze_silver_gold.gold_qttg manual__2026-09-18T07:33:43.962545+00:00 [queued]>
+[2026-09-18T07:35:26.007+0000] {taskinstance.py:1956} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: qttg_bronze_silver_gold.gold_qttg manual__2026-09-18T07:33:43.962545+00:00 [queued]>
+[2026-09-18T07:35:26.009+0000] {taskinstance.py:2170} INFO - Starting attempt 1 of 2
+[2026-09-18T07:35:26.029+0000] {taskinstance.py:2191} INFO - Executing <Task(BashOperator): gold_qttg> on 2026-09-18 07:33:43.962545+00:00
+[2026-09-18T07:35:26.038+0000] {standard_task_runner.py:60} INFO - Started process 233 to run task
+[2026-09-18T07:35:26.042+0000] {standard_task_runner.py:87} INFO - Running: ['***', 'tasks', 'run', 'qttg_bronze_silver_gold', 'gold_qttg', 'manual__2026-09-18T07:33:43.962545+00:00', '--job-id', '32', '--raw', '--subdir', 'DAGS_FOLDER/dag_qttg_bronze_silver_gold.py', '--cfg-path', '/tmp/tmpbcue_njl']
+[2026-09-18T07:35:26.046+0000] {standard_task_runner.py:88} INFO - Job 32: Subtask gold_qttg
+[2026-09-18T07:35:26.130+0000] {task_command.py:423} INFO - Running <TaskInstance: qttg_bronze_silver_gold.gold_qttg manual__2026-09-18T07:33:43.962545+00:00 [running]> on host d1fb7965df24
+[2026-09-18T07:35:26.225+0000] {taskinstance.py:2480} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='student' AIRFLOW_CTX_DAG_ID='qttg_bronze_silver_gold' AIRFLOW_CTX_TASK_ID='gold_qttg' AIRFLOW_CTX_EXECUTION_DATE='2026-09-18T07:33:43.962545+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-09-18T07:33:43.962545+00:00'
+[2026-09-18T07:35:26.227+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-09-18T07:35:26.230+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', 'set -e\ndocker exec qttg-spark-master   /opt/spark/bin/spark-submit   --master spark://spark-master:7077   --deploy-mode client   --driver-memory 1g   --executor-memory 2g   --executor-cores 2   /opt/spark/apps/qttg/gold_qttg.py --silver-dir file:///opt/spark/data/lake/silver --output-dir file:///opt/spark/data/lake/gold']
+[2026-09-18T07:35:26.240+0000] {subprocess.py:86} INFO - Output:
+[2026-09-18T07:35:29.055+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkContext: Running Spark version 3.5.3
+[2026-09-18T07:35:29.057+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkContext: OS info Linux, 6.18.33.2-microsoft-standard-WSL2, amd64
+[2026-09-18T07:35:29.059+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkContext: Java version 11.0.24
+[2026-09-18T07:35:29.115+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[2026-09-18T07:35:29.198+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO ResourceUtils: ==============================================================
+[2026-09-18T07:35:29.200+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO ResourceUtils: No custom resources configured for spark.driver.
+[2026-09-18T07:35:29.202+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO ResourceUtils: ==============================================================
+[2026-09-18T07:35:29.204+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkContext: Submitted application: gold_qttg
+[2026-09-18T07:35:29.229+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(cores -> name: cores, amount: 2, script: , vendor: , memory -> name: memory, amount: 2048, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[2026-09-18T07:35:29.246+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO ResourceProfile: Limiting resource is cpus at 2 tasks per executor
+[2026-09-18T07:35:29.248+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[2026-09-18T07:35:29.309+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SecurityManager: Changing view acls to: root
+[2026-09-18T07:35:29.310+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SecurityManager: Changing modify acls to: root
+[2026-09-18T07:35:29.311+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SecurityManager: Changing view acls groups to:
+[2026-09-18T07:35:29.313+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SecurityManager: Changing modify acls groups to:
+[2026-09-18T07:35:29.314+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: root; groups with view permissions: EMPTY; users with modify permissions: root; groups with modify permissions: EMPTY
+[2026-09-18T07:35:29.652+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO Utils: Successfully started service 'sparkDriver' on port 45553.
+[2026-09-18T07:35:29.697+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkEnv: Registering MapOutputTracker
+[2026-09-18T07:35:29.742+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkEnv: Registering BlockManagerMaster
+[2026-09-18T07:35:29.767+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[2026-09-18T07:35:29.769+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[2026-09-18T07:35:29.776+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[2026-09-18T07:35:29.804+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-70f9cedd-2e27-4b07-b164-392f4eba0eb5
+[2026-09-18T07:35:29.824+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO MemoryStore: MemoryStore started with capacity 434.4 MiB
+[2026-09-18T07:35:29.844+0000] {subprocess.py:93} INFO - 26/09/18 07:35:29 INFO SparkEnv: Registering OutputCommitCoordinator
+[2026-09-18T07:35:30.061+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+[2026-09-18T07:35:30.168+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+[2026-09-18T07:35:30.341+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+[2026-09-18T07:35:30.402+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO TransportClientFactory: Successfully created connection to spark-master/172.18.0.3:7077 after 34 ms (0 ms spent in bootstraps)
+[2026-09-18T07:35:30.519+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20260918073530-0002
+[2026-09-18T07:35:30.523+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260918073530-0002/0 on worker-20260918073125-172.18.0.6-34345 (172.18.0.6:34345) with 2 core(s)
+[2026-09-18T07:35:30.525+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneSchedulerBackend: Granted executor ID app-20260918073530-0002/0 on hostPort 172.18.0.6:34345 with 2 core(s), 2.0 GiB RAM
+[2026-09-18T07:35:30.526+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260918073530-0002/1 on worker-20260918073125-172.18.0.6-34345 (172.18.0.6:34345) with 2 core(s)
+[2026-09-18T07:35:30.529+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneSchedulerBackend: Granted executor ID app-20260918073530-0002/1 on hostPort 172.18.0.6:34345 with 2 core(s), 2.0 GiB RAM
+[2026-09-18T07:35:30.535+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260918073530-0002/2 on worker-20260918073125-172.18.0.6-34345 (172.18.0.6:34345) with 2 core(s)
+[2026-09-18T07:35:30.537+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneSchedulerBackend: Granted executor ID app-20260918073530-0002/2 on hostPort 172.18.0.6:34345 with 2 core(s), 2.0 GiB RAM
+[2026-09-18T07:35:30.539+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 36463.
+[2026-09-18T07:35:30.541+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO NettyBlockTransferService: Server created on e346999f4dc4:36463
+[2026-09-18T07:35:30.543+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[2026-09-18T07:35:30.554+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, e346999f4dc4, 36463, None)
+[2026-09-18T07:35:30.560+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO BlockManagerMasterEndpoint: Registering block manager e346999f4dc4:36463 with 434.4 MiB RAM, BlockManagerId(driver, e346999f4dc4, 36463, None)
+[2026-09-18T07:35:30.565+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, e346999f4dc4, 36463, None)
+[2026-09-18T07:35:30.570+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, e346999f4dc4, 36463, None)
+[2026-09-18T07:35:30.617+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260918073530-0002/0 is now RUNNING
+[2026-09-18T07:35:30.623+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260918073530-0002/1 is now RUNNING
+[2026-09-18T07:35:30.631+0000] {subprocess.py:93} INFO - 26/09/18 07:35:30 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260918073530-0002/2 is now RUNNING
+[2026-09-18T07:35:31.031+0000] {subprocess.py:93} INFO - 26/09/18 07:35:31 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+[2026-09-18T07:35:31.370+0000] {subprocess.py:93} INFO - [GOLD] Doc Silver master tu: file:///opt/spark/data/lake/silver/qttg_bhxh
+[2026-09-18T07:35:40.677+0000] {subprocess.py:93} INFO - [GOLD] Doc Silver detail tu: file:///opt/spark/data/lake/silver/qttg_bhxh_detail
+[2026-09-18T07:35:42.823+0000] {subprocess.py:93} INFO - [GOLD] Tao DIM_THANG tu khoang TU_THANG/DEN_THANG cua detail...
+[2026-09-18T07:35:46.372+0000] {subprocess.py:93} INFO - [GOLD] DIM_THANG: 629 thang, tu 197402 den 202606
+[2026-09-18T07:35:46.373+0000] {subprocess.py:93} INFO - [GOLD] Tinh bao cao theo thang...
+[2026-09-18T07:35:46.783+0000] {subprocess.py:93} INFO - [GOLD] Ghi bao cao ra: file:///opt/spark/data/lake/gold/bao_cao_bhxh_thang
+[2026-09-18T07:36:06.399+0000] {subprocess.py:93} INFO - [GOLD] Input Silver: 21838 nguoi, 169658 dong detail
+[2026-09-18T07:36:06.402+0000] {subprocess.py:93} INFO - [GOLD] Bao cao: 629 thang (tu 197402 den 202606), thang dong nhat co 1753 nguoi tham gia, tong quy luong toan bo cac thang = 4,415,218,450,000, tong luot nguoi luong 0 (cong don qua cac thang) = 208979
+[2026-09-18T07:36:06.404+0000] {subprocess.py:93} INFO - LAYER=GOLD STATUS=SUCCESS MONTHS=629
+[2026-09-18T07:36:07.405+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2026-09-18T07:36:07.444+0000] {taskinstance.py:1138} INFO - Marking task as SUCCESS. dag_id=qttg_bronze_silver_gold, task_id=gold_qttg, execution_date=20260918T073343, start_date=20260918T073525, end_date=20260918T073607
+[2026-09-18T07:36:07.487+0000] {local_task_job_runner.py:234} INFO - Task exited with return code 0
+[2026-09-18T07:36:07.528+0000] {taskinstance.py:3280} INFO - 1 downstream tasks scheduled from follow-on schedule check
