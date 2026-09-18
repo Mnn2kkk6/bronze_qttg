@@ -36,6 +36,8 @@ LAYER=VALIDATE STATUS=SUCCESS ERROR_ROWS=0
 ```
 
 DAG `qttg_bronze_silver_gold` trên Airflow UI, cả 4 task đều `success`:
+<img width="1898" height="869" alt="image" src="https://github.com/user-attachments/assets/243cfa51-ea19-4629-a90d-c6c48786f45c" />
+
 
 ```text
 bronze_qttg (success) → silver_qttg (success) → gold_qttg (success) → validate_qttg (success)
