@@ -1,0 +1,136 @@
+# docker-compose.yml cho project Datahub (QTTG BHXH)
+# Dung: Spark Master + Spark Worker (image chinh thuc apache/spark, do
+# Apache Software Foundation duy tri) + Airflow (LocalExecutor) + Postgres
+# (metadata Airflow), tat ca cung network `spark-net`.
+#
+# Ghi chu: ban dau file nay dung bitnami/spark:3.5, nhung Bitnami da ngung
+# cung cap cac tag phien ban mien phi (chuyen sang catalog thuong mai "Bitnami
+# Secure Images" tu cuoi 2025) nen image do khong con ton tai cong khai.
+# Doi sang apache/spark:3.5.3 (image chinh thuc, on dinh lau dai).
+#
+# platform: linux/amd64 duoc ep ro tren moi service de tranh loi
+# "exec format error" khi Docker vo tinh keo nham bien the kien truc khac.
+#
+# Chay tai thu muc goc Datahub (cung cap voi file nay):
+#   $env:AIRFLOW_UID = "50000"
+#   docker compose build airflow-init airflow-webserver airflow-scheduler
+#   docker compose up airflow-init
+#   docker compose up -d postgres spark-master spark-worker airflow-webserver airflow-scheduler
+#   docker compose ps
+
+x-airflow-common: &airflow-common
+  build:
+    context: ./airflow-local
+  image: qttg-airflow:2.8.1
+  platform: linux/amd64
+  user: "${AIRFLOW_UID:-50000}:0"
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+    AIRFLOW__WEBSERVER__SECRET_KEY: local-qTTg-demo-only
+  volumes:
+    - ./airflow-local/dags:/opt/airflow/dags
+    - ./airflow-local/logs:/opt/airflow/logs
+    - /var/run/docker.sock:/var/run/docker.sock
+  networks:
+    - spark-net
+  depends_on:
+    postgres:
+      condition: service_healthy
+
+services:
+  # ---------------- Spark ----------------
+  spark-master:
+    image: apache/spark:3.5.3
+    platform: linux/amd64
+    container_name: qttg-spark-master
+    user: root
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+      --host spark-master --port 7077 --webui-port 8080
+    ports:
+      - "8080:8080"   # Spark Master UI
+      - "7077:7077"   # Spark Master RPC (chi de kiem tra port tu Windows)
+    volumes:
+      - ./spark/apps/qttg:/opt/spark/apps/qttg:ro
+      - ./output/raw_qttg_1m:/opt/spark/data/raw_qttg_1m:ro
+      - ./output/spark_lake:/opt/spark/data/lake
+    networks:
+      - spark-net
+
+  spark-worker:
+    image: apache/spark:3.5.3
+    platform: linux/amd64
+    container_name: qttg-spark-worker
+    user: root
+    command: >
+      /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker
+      spark://spark-master:7077 --webui-port 8081
+    ports:
+      - "8081:8081"   # Spark Worker UI
+    volumes:
+      - ./spark/apps/qttg:/opt/spark/apps/qttg:ro
+      - ./output/raw_qttg_1m:/opt/spark/data/raw_qttg_1m:ro
+      - ./output/spark_lake:/opt/spark/data/lake
+    depends_on:
+      - spark-master
+    networks:
+      - spark-net
+
+  # ---------------- Airflow metadata DB ----------------
+  postgres:
+    image: postgres:15
+    platform: linux/amd64
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - spark-net
+
+  # ---------------- Airflow ----------------
+  airflow-init:
+    <<: *airflow-common
+    command:
+      - bash
+      - -c
+      - |
+        airflow db migrate &&
+        (airflow users create \
+          --username admin \
+          --password admin \
+          --firstname Local \
+          --lastname Admin \
+          --role Admin \
+          --email admin@example.local || echo "User admin da ton tai")
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8082:8080"   # Airflow UI (8080/8081 da danh cho Spark)
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+
+networks:
+  spark-net:
+    driver: bridge
+
+volumes:
+  airflow-postgres:
